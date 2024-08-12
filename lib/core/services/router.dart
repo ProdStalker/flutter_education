@@ -1,14 +1,15 @@
 import 'package:education/core/commons/views/page_under_construction.dart';
+import 'package:education/src/on_boarding/presentation/on_boarding_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    /*case OnBoardingScreen.routeName:
+    case OnBoardingScreen.routeName:
       return _pageBuilder(
         (_) => const OnBoardingScreen(),
         settings: settings,
-      );*/
+      );
     default:
       return _pageBuilder(
         (p0) => const PageUnderConstruction(),
