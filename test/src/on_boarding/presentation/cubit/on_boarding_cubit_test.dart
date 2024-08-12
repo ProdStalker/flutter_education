@@ -79,7 +79,8 @@ void main() {
 
   group('checkIfUserIsFirstTimer', () {
     blocTest<OnBoardingCubit, OnBoardingState>(
-      'should emit [CheckingIfUserIsFirstTimer, OnBoardingStatus] when successful',
+      'should emit [CheckingIfUserIsFirstTimer, OnBoardingStatus] when '
+      'successful',
       build: () {
         when(() => checkIfUserIsFirstTimer()).thenAnswer(
           (_) async => const Right(false),
