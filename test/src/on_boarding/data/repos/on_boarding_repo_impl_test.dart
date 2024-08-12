@@ -65,4 +65,64 @@ void main() {
       },
     );
   });
+
+  group('checkIfUserIsFirstTimer', () {
+    test(
+      'should return true when is the first timer',
+      () async {
+        when(() => localDataSource.checkIfUserIsFirstTimer())
+            .thenAnswer((_) async {
+          return Future.value(true);
+        });
+
+        final result = await repoImpl.checkIfUserIsFirstTimer();
+
+        expect(result, equals(const Right<dynamic, bool>(true)));
+
+        verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+        verifyNoMoreInteractions(localDataSource);
+      },
+    );
+
+    test(
+      'should return false when is not first timer',
+      () async {
+        when(() => localDataSource.checkIfUserIsFirstTimer()).thenAnswer(
+          (_) async => Future.value(false),
+        );
+
+        final result = await repoImpl.checkIfUserIsFirstTimer();
+
+        expect(result, const Right<dynamic, bool>(false));
+
+        verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+        verifyNoMoreInteractions(localDataSource);
+      },
+    );
+
+    test(
+      'should return [CacheFailure] when call to local source is '
+      'unsuccessful',
+      () async {
+        when(() => localDataSource.checkIfUserIsFirstTimer()).thenThrow(
+          const CacheException(message: 'Insufficient storage'),
+        );
+
+        final result = await repoImpl.checkIfUserIsFirstTimer();
+
+        expect(
+          result,
+          Left<CacheFailure, dynamic>(
+            CacheFailure(
+              message: 'Insufficient storage',
+              statusCode: 500,
+            ),
+          ),
+        );
+
+        verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+        verifyNoMoreInteractions(localDataSource);
+      },
+    );
+  });
 }
