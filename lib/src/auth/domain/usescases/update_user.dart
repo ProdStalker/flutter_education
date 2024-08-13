@@ -1,0 +1,38 @@
+import 'package:education/core/enums/update_user.dart';
+import 'package:education/core/usecases/usecases.dart';
+import 'package:education/core/utils/typedefs.dart';
+import 'package:education/src/auth/domain/repos/auth_repo.dart';
+import 'package:equatable/equatable.dart';
+
+class UpdateUser extends UsecaseWithParams<void, UpdateUserParams> {
+  const UpdateUser(this._repo);
+
+  final AuthRepo _repo;
+
+  @override
+  ResultFuture<void> call(UpdateUserParams params) {
+    return _repo.updateUser(
+      action: params.action,
+      userData: params.userData,
+    );
+  }
+}
+
+class UpdateUserParams extends Equatable {
+  const UpdateUserParams({
+    required this.action,
+    required this.userData,
+  });
+
+  const UpdateUserParams.empty()
+      : this(action: UpdateUserAction.fullName, userData: '');
+
+  final UpdateUserAction action;
+  final dynamic userData;
+
+  @override
+  List<Object?> get props => [
+        action,
+        userData,
+      ];
+}
