@@ -26,7 +26,7 @@ class DashboardController extends ChangeNotifier {
     ChangeNotifierProvider(
       create: (_) => TabNavigator(
         TabItem(
-          child: const ProfileView(),
+          child: const Placeholder(),
         ),
       ),
       child: const PersistentView(),
@@ -34,7 +34,7 @@ class DashboardController extends ChangeNotifier {
     ChangeNotifierProvider(
       create: (_) => TabNavigator(
         TabItem(
-          child: const Placeholder(),
+          child: const ProfileView(),
         ),
       ),
       child: const PersistentView(),
