@@ -5,8 +5,29 @@ final sl = GetIt.instance;
 Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await _initAuthInit();
   await _initOnBoardingInit();
+  await _initAuthInit();
+  await _initCourse();
+}
+
+Future<void> _initCourse() async {
+  sl
+    ..registerFactory(
+      () => CourseCubit(
+        addCourse: sl(),
+        getCourses: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => AddCourse(sl()))
+    ..registerLazySingleton(() => GetCourses(sl()))
+    ..registerLazySingleton<CourseRepo>(() => CourseRepoImpl(sl()))
+    ..registerLazySingleton<CourseRemoteDataSource>(
+      () => CourseRemoteDataSourceImpl(
+        firestore: sl(),
+        storage: sl(),
+        auth: sl(),
+      ),
+    );
 }
 
 Future<void> _initAuthInit() async {
