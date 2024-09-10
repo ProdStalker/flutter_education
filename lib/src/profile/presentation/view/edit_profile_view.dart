@@ -11,7 +11,6 @@ import 'package:education/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:education/src/profile/presentation/widgets/edit_profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -30,10 +29,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   File? pickedImage;
 
   Future<void> pickImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    final imageFile = await CoreUtils.pickImage();
+    if (imageFile != null) {
       setState(() {
-        pickedImage = File(image.path);
+        pickedImage = imageFile;
       });
     }
   }

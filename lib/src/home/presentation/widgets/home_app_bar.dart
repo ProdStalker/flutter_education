@@ -20,15 +20,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         const Icon(IconlyLight.notification),
         Consumer<UserProvider>(
           builder: (_, provider, __) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundImage: provider.user!.profilePic != null
-                    ? NetworkImage(provider.user!.profilePic!)
-                    : const AssetImage(MediaRes.user) as ImageProvider,
-              ),
-            );
+            return provider.user == null
+                ? const SizedBox()
+                : Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundImage: provider.user!.profilePic != null
+                          ? NetworkImage(provider.user!.profilePic!)
+                          : const AssetImage(MediaRes.user) as ImageProvider,
+                    ),
+                  );
           },
         ),
       ],
