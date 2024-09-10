@@ -92,7 +92,7 @@ void main() {
     );
   });
 
-  group('getCourse', () {
+  group('getCourses', () {
     test('should return a List<Course>', () async {
       final firstDate = DateTime.now();
       final secondDate = DateTime.now().add(const Duration(seconds: 20));

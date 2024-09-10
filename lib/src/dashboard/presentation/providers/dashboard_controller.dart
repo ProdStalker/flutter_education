@@ -1,7 +1,11 @@
 import 'package:education/core/commons/app/providers/tab_navigator.dart';
 import 'package:education/core/commons/views/persistent_view.dart';
+import 'package:education/core/services/injection_container.dart';
+import 'package:education/src/course/presentation/cubit/course_cubit.dart';
+import 'package:education/src/home/presentation/views/home_view.dart';
 import 'package:education/src/profile/presentation/view/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class DashboardController extends ChangeNotifier {
@@ -10,7 +14,10 @@ class DashboardController extends ChangeNotifier {
     ChangeNotifierProvider(
       create: (_) => TabNavigator(
         TabItem(
-          child: const Placeholder(),
+          child: BlocProvider(
+            create: (_) => sl<CourseCubit>(),
+            child: const HomeView(),
+          ),
         ),
       ),
       child: const PersistentView(),
