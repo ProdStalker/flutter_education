@@ -41,7 +41,7 @@ void main() {
   late FirebaseFirestore firestore;
   late FirebaseAuth auth;
   late MockFirebaseStorage storage;
-  late UserCredential userCredential;
+  //late UserCredential userCredential;
   late DocumentReference<DataMap> documentReference;
   late MockUser mockUser;
 
@@ -56,7 +56,7 @@ void main() {
     );
     storage = MockFirebaseStorage();
     mockUser = MockUser()..uid = documentReference.id;
-    userCredential = MockUserCredential(mockUser);
+    //userCredential = MockUserCredential(mockUser);
     remoteDataSource = CourseRemoteDataSourceImpl(
       firestore: firestore,
       storage: storage,

@@ -10,6 +10,6 @@ class GetCourses extends UsecaseWithoutParams<List<Course>> {
 
   @override
   ResultFuture<List<Course>> call() async {
-    return await _repo.getCourses();
+    return _repo.getCourses();
   }
 }
