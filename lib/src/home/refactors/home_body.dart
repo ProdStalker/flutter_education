@@ -3,6 +3,7 @@ import 'package:education/core/commons/views/loading_view.dart';
 import 'package:education/core/commons/widgets/not_found_text.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/presentation/cubit/course_cubit.dart';
+import 'package:education/src/home/refactors/home_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,7 +45,9 @@ class _HomeBodyState extends State<HomeBody> {
 
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            children: [],
+            children: const [
+              HomeHeader(),
+            ],
           );
         }
 

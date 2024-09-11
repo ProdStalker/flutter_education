@@ -1,6 +1,8 @@
+import 'package:education/core/commons/app/providers/course_of_the_day_notifier.dart';
 import 'package:education/core/commons/app/providers/tab_navigator.dart';
 import 'package:education/core/commons/app/providers/user_provider.dart';
 import 'package:education/src/auth/domain/entities/user.dart';
+import 'package:education/src/course/domain/entities/course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +22,8 @@ extension ContextExt on BuildContext {
   LocalUser? get currentUser => userProvider.user;
 
   TabNavigator get tabNavigator => read<TabNavigator>();
+
+  Course? get courseOfTheDay => read<CourseOfTheDayNotifier>().courseOfTheDay;
 
   void pop() => tabNavigator.pop();
 
