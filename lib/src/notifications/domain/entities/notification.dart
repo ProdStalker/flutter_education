@@ -8,6 +8,7 @@ class Notification extends Equatable {
     required this.body,
     required this.category,
     required this.sentAt,
+    this.seen = false,
   });
 
   Notification.empty()
@@ -16,6 +17,7 @@ class Notification extends Equatable {
           title: '_empty.title',
           body: '_empty.body',
           category: NotificationCategory.NONE,
+          seen: false,
           sentAt: DateTime.now(),
         );
 
@@ -23,6 +25,7 @@ class Notification extends Equatable {
   final String title;
   final String body;
   final NotificationCategory category;
+  final bool seen;
   final DateTime sentAt;
 
   @override
