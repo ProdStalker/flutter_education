@@ -1,6 +1,9 @@
+// users >> userId >> courses >> courseId >> exams >> examId >> answer
 import 'package:education/src/course/features/exams/domain/entities/user_choice.dart';
 import 'package:equatable/equatable.dart';
 
+/// So the plan is, even when we want to display the user's exam history, we
+/// can fetch the actual exam by the [examId] and then display the questions.
 class UserExam extends Equatable {
   const UserExam({
     required this.examId,
@@ -18,9 +21,9 @@ class UserExam extends Equatable {
           courseId: 'Test String',
           totalQuestions: 0,
           examTitle: 'Test String',
+          examImageUrl: 'Test String',
           dateSubmitted: date ?? DateTime.now(),
           answers: const [],
-          examImageUrl: 'Test String',
         );
 
   final String examId;

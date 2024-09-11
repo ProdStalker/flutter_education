@@ -10,7 +10,6 @@ class GetExamQuestions extends UsecaseWithParams<List<ExamQuestion>, Exam> {
   final ExamRepo _repo;
 
   @override
-  ResultFuture<List<ExamQuestion>> call(Exam params) {
-    return _repo.getExamQuestions(params);
-  }
+  ResultFuture<List<ExamQuestion>> call(Exam params) =>
+      _repo.getExamQuestions(params);
 }

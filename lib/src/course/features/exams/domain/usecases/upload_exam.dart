@@ -9,7 +9,5 @@ class UploadExam extends UsecaseWithParams<void, Exam> {
   final ExamRepo _repo;
 
   @override
-  ResultFuture<void> call(Exam params) {
-    return _repo.uploadExam(params);
-  }
+  ResultFuture<void> call(Exam params) => _repo.uploadExam(params);
 }

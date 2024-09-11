@@ -7,13 +7,6 @@ class QuestionChoice extends Equatable {
     required this.choiceAnswer,
   });
 
-  const QuestionChoice.empty()
-      : this(
-          questionId: 'Test String',
-          identifier: 'Test String',
-          choiceAnswer: 'Test String',
-        );
-
   final String questionId;
   final String identifier;
   final String choiceAnswer;

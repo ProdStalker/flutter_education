@@ -9,7 +9,6 @@ class GetUserCourseExams extends UsecaseWithParams<List<UserExam>, String> {
   final ExamRepo _repo;
 
   @override
-  ResultFuture<List<UserExam>> call(String params) {
-    return _repo.getUserCourseExams(params);
-  }
+  ResultFuture<List<UserExam>> call(String params) =>
+      _repo.getUserCourseExams(params);
 }

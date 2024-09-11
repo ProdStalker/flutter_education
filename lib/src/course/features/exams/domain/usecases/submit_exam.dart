@@ -9,7 +9,5 @@ class SubmitExam extends UsecaseWithParams<void, UserExam> {
   final ExamRepo _repo;
 
   @override
-  ResultFuture<void> call(UserExam params) {
-    return _repo.submitExam(params);
-  }
+  ResultFuture<void> call(UserExam params) => _repo.submitExam(params);
 }

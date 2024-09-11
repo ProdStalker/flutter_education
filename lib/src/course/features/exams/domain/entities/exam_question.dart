@@ -14,8 +14,8 @@ class ExamQuestion extends Equatable {
   const ExamQuestion.empty()
       : this(
           id: 'Test String',
-          courseId: 'Test String',
           examId: 'Test String',
+          courseId: 'Test String',
           questionText: 'Test String',
           choices: const [],
         );

@@ -19,7 +19,6 @@ class Exam extends Equatable {
           title: 'Test String',
           description: 'Test String',
           timeLimit: 0,
-          imageUrl: 'Test String',
           questions: const [],
         );
 

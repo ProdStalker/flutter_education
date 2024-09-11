@@ -9,7 +9,5 @@ class GetUserExams extends UsecaseWithoutParams<List<UserExam>> {
   final ExamRepo _repo;
 
   @override
-  ResultFuture<List<UserExam>> call() {
-    return _repo.getUserExams();
-  }
+  ResultFuture<List<UserExam>> call() => _repo.getUserExams();
 }

@@ -14,16 +14,6 @@ class ExamRepoImpl implements ExamRepo {
   final ExamRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<List<ExamQuestion>> getExamQuestions(Exam exam) async {
-    try {
-      final result = await _remoteDataSource.getExamQuestions(exam);
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure.fromException(e));
-    }
-  }
-
-  @override
   ResultFuture<List<Exam>> getExams(String courseId) async {
     try {
       final result = await _remoteDataSource.getExams(courseId);
@@ -34,29 +24,9 @@ class ExamRepoImpl implements ExamRepo {
   }
 
   @override
-  ResultFuture<List<UserExam>> getUserCourseExams(String courseId) async {
+  ResultFuture<void> uploadExam(Exam exam) async {
     try {
-      final result = await _remoteDataSource.getUserCourseExams(courseId);
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure.fromException(e));
-    }
-  }
-
-  @override
-  ResultFuture<List<UserExam>> getUserExams() async {
-    try {
-      final result = await _remoteDataSource.getUserExams();
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure.fromException(e));
-    }
-  }
-
-  @override
-  ResultFuture<void> submitExam(UserExam exam) async {
-    try {
-      await _remoteDataSource.submitExam(exam);
+      await _remoteDataSource.uploadExam(exam);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -74,10 +44,40 @@ class ExamRepoImpl implements ExamRepo {
   }
 
   @override
-  ResultFuture<void> uploadExam(Exam exam) async {
+  ResultFuture<void> submitExam(UserExam exam) async {
     try {
-      await _remoteDataSource.uploadExam(exam);
+      await _remoteDataSource.submitExam(exam);
       return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<List<ExamQuestion>> getExamQuestions(Exam exam) async {
+    try {
+      final result = await _remoteDataSource.getExamQuestions(exam);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<List<UserExam>> getUserExams() async {
+    try {
+      final result = await _remoteDataSource.getUserExams();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<List<UserExam>> getUserCourseExams(String courseId) async {
+    try {
+      final result = await _remoteDataSource.getUserCourseExams(courseId);
+      return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
     }
