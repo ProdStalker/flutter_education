@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:education/core/errors/exceptions.dart';
+import 'package:education/core/utils/datasource_utils.dart';
 import 'package:education/src/chat/data/models/group_model.dart';
 import 'package:education/src/course/data/models/course_model.dart';
 import 'package:education/src/course/domain/entities/course.dart';
@@ -32,13 +33,7 @@ class CourseRemoteDataSourceImpl implements CourseRemoteDataSource {
   @override
   Future<void> addCourse(Course course) async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) {
-        throw const ServerException(
-          message: 'User is not authenticated',
-          statusCode: '401',
-        );
-      }
+      await DataSourceUtils.authorizeUser(_auth);
 
       final courseRef = _firestore.collection('courses').doc();
       final groupRef = _firestore.collection('groups').doc();
@@ -86,13 +81,7 @@ class CourseRemoteDataSourceImpl implements CourseRemoteDataSource {
   @override
   Future<List<CourseModel>> getCourses() async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) {
-        throw const ServerException(
-          message: 'User is not authenticated',
-          statusCode: '401',
-        );
-      }
+      await DataSourceUtils.authorizeUser(_auth);
       return _firestore.collection('courses').get().then(
             (value) => value.docs
                 .map((doc) => CourseModel.fromMap(doc.data()))
