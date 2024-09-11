@@ -9,6 +9,8 @@ environment:
   sdk: '>=3.3.1 <4.0.0'
 
 dependencies:
+  audioplayers: ^6.1.0
+  badges: ^3.1.2
   bloc: ^8.1.4
   chewie: ^1.8.3
   cloud_firestore: ^4.17.5
@@ -63,6 +65,7 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/vectors/
+    - assets/sounds/
 
   fonts:
     - family: Aeonik

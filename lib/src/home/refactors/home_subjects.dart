@@ -4,7 +4,7 @@ import 'package:education/core/res/colours.dart';
 import 'package:education/src/course/domain/entities/course.dart';
 import 'package:education/src/course/presentation/views/all_courses_view.dart';
 import 'package:education/src/course/presentation/views/course_details_screen.dart';
-import 'package:education/src/home/refactors/section_header.dart';
+import 'package:education/src/home/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 class HomeSubjects extends StatelessWidget {

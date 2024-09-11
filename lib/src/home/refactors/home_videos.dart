@@ -4,7 +4,7 @@ import 'package:education/core/extensions/context_extension.dart';
 import 'package:education/core/services/injection_container.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/features/videos/presentation/cubit/video_cubit.dart';
-import 'package:education/src/home/refactors/section_header.dart';
+import 'package:education/src/home/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:education/core/errors/failures.dart';
 import 'package:education/src/notifications/data/models/notification_model.dart';
-import 'package:education/src/notifications/domain/entities/notification.dart';
 import 'package:education/src/notifications/domain/usecases/clear.dart';
 import 'package:education/src/notifications/domain/usecases/clear_all.dart';
 import 'package:education/src/notifications/domain/usecases/get_notifications.dart';
