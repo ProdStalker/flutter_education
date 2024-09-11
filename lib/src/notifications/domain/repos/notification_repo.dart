@@ -1,5 +1,5 @@
 import 'package:education/core/utils/typedefs.dart';
-import 'package:education/src/notification/domain/entities/notification.dart';
+import 'package:education/src/notifications/domain/entities/notification.dart';
 
 abstract class NotificationRepo {
   const NotificationRepo();
