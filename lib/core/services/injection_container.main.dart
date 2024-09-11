@@ -8,6 +8,27 @@ Future<void> init() async {
   await _initOnBoardingInit();
   await _initAuthInit();
   await _initCourse();
+  await _initVideo();
+}
+
+Future<void> _initVideo() async {
+  sl
+    ..registerFactory(
+      () => VideoCubit(
+        addVideo: sl(),
+        getVideos: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => AddVideo(sl()))
+    ..registerLazySingleton(() => GetVideos(sl()))
+    ..registerLazySingleton<VideoRepo>(() => VideoRepoImpl(sl()))
+    ..registerLazySingleton<VideoRemoteDataSource>(
+      () => VideoRemoteDataSourceImpl(
+        firestore: sl(),
+        storage: sl(),
+        auth: sl(),
+      ),
+    );
 }
 
 Future<void> _initCourse() async {

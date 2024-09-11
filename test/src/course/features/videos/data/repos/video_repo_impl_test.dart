@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:education/core/errors/exceptions.dart';
 import 'package:education/src/course/features/videos/data/datasources/video_remote_data_source.dart';
 import 'package:education/src/course/features/videos/data/models/video_model.dart';
 import 'package:education/src/course/features/videos/data/repos/video_repo_impl.dart';
@@ -19,11 +18,6 @@ void main() {
     repoImpl = VideoRepoImpl(remoteDataSource);
     registerFallbackValue(tVideo);
   });
-
-  const tException = ServerException(
-    message: 'message',
-    statusCode: 'statusCode',
-  );
 
   group('addVideo', () {
     test(
