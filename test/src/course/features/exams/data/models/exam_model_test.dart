@@ -38,7 +38,6 @@ void main() {
           () async {
         final json = fixture('uploaded_exam.json');
         final result = ExamModel.fromJson(json);
-        print(result);
         expect(result, tExamModel);
       });
     });
