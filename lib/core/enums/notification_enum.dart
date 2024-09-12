@@ -6,7 +6,7 @@ enum NotificationCategory {
   TEST(value: 'test', image: MediaRes.test),
   VIDEO(value: 'video', image: MediaRes.video),
   MATERIAL(value: 'material', image: MediaRes.material),
-  COURSES(value: 'courses', image: MediaRes.course),
+  COURSE(value: 'course', image: MediaRes.course),
   NONE(value: 'none', image: MediaRes.course);
 
   const NotificationCategory({required this.value, required this.image});

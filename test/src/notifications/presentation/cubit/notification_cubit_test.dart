@@ -216,8 +216,8 @@ void main() {
   // group('getNotifications', () {
   //   final tNotification = NotificationModel.empty();
   //   test(
-  //     'should return [Stream<Either<NotificationError, List<Notification>>>] '
-  //         'when successful',
+  //     'should return [Stream<Either<NotificationError, List<Notification>>>]'
+  //         ' when successful',
   //         () async {
   //       when(() => getNotifications())
   //           .thenAnswer((_) => Stream.value(Right([tNotification])));
@@ -235,8 +235,8 @@ void main() {
   //   );
   //
   //   test(
-  //     'should return [Stream<Either<NotificationError, List<Notification>>>] '
-  //         'when unsuccessful',
+  //     'should return [Stream<Either<NotificationError, List<Notification>>>]'
+  //         ' when unsuccessful',
   //         () async {
   //       when(() => getNotifications()).thenAnswer(
   //             (_) => Stream.value(

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:education/core/commons/widgets/titled_input_field.dart';
+import 'package:education/core/enums/notification_enum.dart';
 import 'package:education/core/utils/constants.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/data/models/course_model.dart';
 import 'package:education/src/course/presentation/cubit/course_cubit.dart';
+import 'package:education/src/notifications/presentation/widgets/notification_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,125 +53,138 @@ class _AddCourseSheetState extends State<AddCourseSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CourseCubit, CourseState>(
-      listener: (_, state) {
-        if (state is CourseError) {
-          CoreUtils.showSnackBar(context, state.message);
-        } else if (state is AddingCourse) {
-          loading = true;
-          CoreUtils.showLoadingDialog(context);
-        } else if (state is CourseAdded) {
-          if (loading) {
-            loading = false;
-            Navigator.pop(context);
-          }
-          CoreUtils.showSnackBar(context, 'Course added successfully');
-          Navigator.pop(context);
-
-          //CoreUtils.showLoadingDialog(context);
-          // TODO(Add-Course): Send Notifications
+    return NotificationWrapper(
+      onNotificationSent: () {
+        if (loading) {
+          Navigator.of(context).pop();
         }
+        Navigator.of(context).pop();
       },
-      child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(20),
+      child: BlocListener<CourseCubit, CourseState>(
+        listener: (_, state) async {
+          if (state is CourseError) {
+            CoreUtils.showSnackBar(context, state.message);
+          } else if (state is AddingCourse) {
+            loading = true;
+            CoreUtils.showLoadingDialog(context);
+          } else if (state is CourseAdded) {
+            if (loading) {
+              loading = false;
+              Navigator.pop(context);
+            }
+            CoreUtils.showSnackBar(context, 'Course added successfully');
+            CoreUtils.showLoadingDialog(context);
+            loading = true;
+            CoreUtils.sendNotification(
+              context: context,
+              title: 'New Course(${titleController.text.trim()})',
+              body: 'A new course has been added',
+              category: NotificationCategory.COURSE,
+            );
+          }
+        },
+        child: Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
             ),
-          ),
-          child: Form(
-            key: formKey,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                const Text(
-                  'Add Course',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            child: Form(
+              key: formKey,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  const Text(
+                    'Add Course',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TitledInputField(
-                  controller: titleController,
-                  title: 'Course Title',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TitledInputField(
-                  controller: descriptionController,
-                  title: 'Description',
-                  required: false,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TitledInputField(
-                  controller: imageController,
-                  title: 'Course Image',
-                  required: false,
-                  hintText: 'Enter image URL or pick from gallery',
-                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      final image = await CoreUtils.pickImage();
-                      if (image != null) {
-                        isFile = true;
-                        this.image = image;
-                        final imageName = image.path.split('/').last;
-                        imageController.text = imageName;
-                      }
-                    },
-                    icon: const Icon(Icons.add_photo_alternate_outlined),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            final now = DateTime.now();
-                            final course = CourseModel.empty().copyWith(
-                              title: titleController.text.trim(),
-                              image: imageController.text.trim().isEmpty
-                                  ? kDefaultAvatar
-                                  : isFile
-                                      ? image!.path
-                                      : imageController.text.trim(),
-                              description: descriptionController.text.trim(),
-                              createdAt: now,
-                              updatedAt: now,
-                              imageIsFile: isFile,
-                            );
-                            context.read<CourseCubit>().addCourse(course);
-                          }
-                        },
-                        child: const Text('Add'),
+                  TitledInputField(
+                    controller: titleController,
+                    title: 'Course Title',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TitledInputField(
+                    controller: descriptionController,
+                    title: 'Description',
+                    required: false,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TitledInputField(
+                    controller: imageController,
+                    title: 'Course Image',
+                    required: false,
+                    hintText: 'Enter image URL or pick from gallery',
+                    hintStyle:
+                        const TextStyle(color: Colors.grey, fontSize: 12),
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        final image = await CoreUtils.pickImage();
+                        if (image != null) {
+                          isFile = true;
+                          this.image = image;
+                          final imageName = image.path.split('/').last;
+                          imageController.text = imageName;
+                        }
+                      },
+                      icon: const Icon(Icons.add_photo_alternate_outlined),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              final now = DateTime.now();
+                              final course = CourseModel.empty().copyWith(
+                                title: titleController.text.trim(),
+                                image: imageController.text.trim().isEmpty
+                                    ? kDefaultAvatar
+                                    : isFile
+                                        ? image!.path
+                                        : imageController.text.trim(),
+                                description: descriptionController.text.trim(),
+                                createdAt: now,
+                                updatedAt: now,
+                                imageIsFile: isFile,
+                              );
+                              context.read<CourseCubit>().addCourse(course);
+                            }
+                          },
+                          child: const Text('Add'),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancel'),
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

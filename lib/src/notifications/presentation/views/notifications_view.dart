@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:education/core/commons/views/loading_view.dart';
 import 'package:education/core/commons/widgets/nested_back_button.dart';
 import 'package:education/core/extensions/context_extension.dart';
+import 'package:education/core/services/injection_container.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/notifications/presentation/cubit/notification_cubit.dart';
 import 'package:education/src/notifications/presentation/widgets/no_notifications.dart';
@@ -59,7 +60,10 @@ class _NotificationsViewState extends State<NotificationsView> {
                 return Badge(
                   showBadge: !notification.seen,
                   position: BadgePosition.topEnd(top: 30, end: 20),
-                  child: NotificationTile(notification),
+                  child: BlocProvider(
+                    create: (context) => sl<NotificationCubit>(),
+                    child: NotificationTile(notification),
+                  ),
                 );
               },
             );

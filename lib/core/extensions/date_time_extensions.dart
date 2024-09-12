@@ -16,7 +16,8 @@ extension DateTimeExt on DateTime {
     } else if (difference.inHours > 0) {
       return '${difference.inHours}) hour${difference.inHours.pluralize} ago';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minute${difference.inMinutes.pluralize} ago';
+      return '${difference.inMinutes} minute${difference.inMinutes.pluralize} '
+          'ago';
     } else {
       return 'now';
     }

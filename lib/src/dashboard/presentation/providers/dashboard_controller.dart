@@ -24,9 +24,7 @@ class DashboardController extends ChangeNotifier {
               BlocProvider(
                 create: (_) => sl<VideoCubit>(),
               ),
-              BlocProvider(
-                create: (_) => sl<NotificationCubit>(),
-              ),
+              BlocProvider.value(value: sl<NotificationCubit>()),
             ],
             child: const HomeView(),
           ),

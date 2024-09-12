@@ -10,7 +10,7 @@ extension NotificationExt on String {
       case 'material':
         return NotificationCategory.MATERIAL;
       case 'course':
-        return NotificationCategory.COURSES;
+        return NotificationCategory.COURSE;
       default:
         return NotificationCategory.NONE;
     }
