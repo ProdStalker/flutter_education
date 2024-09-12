@@ -12,9 +12,9 @@ extension DateTimeExt on DateTime {
       final months = (difference.inDays / 30).floor();
       return '$months month${months.pluralize} ago';
     } else if (difference.inDays > 0) {
-      return '${difference.inDays}) day${difference.inDays.pluralize} ago';
+      return '${difference.inDays} day${difference.inDays.pluralize} ago';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}) hour${difference.inHours.pluralize} ago';
+      return '${difference.inHours} hour${difference.inHours.pluralize} ago';
     } else if (difference.inMinutes > 0) {
       return '${difference.inMinutes} minute${difference.inMinutes.pluralize} '
           'ago';
