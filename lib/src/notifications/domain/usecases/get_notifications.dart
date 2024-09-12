@@ -9,7 +9,5 @@ class GetNotifications extends StreamUsecaseWithoutParams<List<Notification>> {
   final NotificationRepo _repo;
 
   @override
-  ResultStream<List<Notification>> call() {
-    return _repo.getNotifications();
-  }
+  ResultStream<List<Notification>> call() => _repo.getNotifications();
 }

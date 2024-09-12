@@ -7,8 +7,6 @@ class NoNotifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Lottie.asset(MediaRes.noNotifications),
-    );
+    return Center(child: Lottie.asset(MediaRes.noNotifications));
   }
 }

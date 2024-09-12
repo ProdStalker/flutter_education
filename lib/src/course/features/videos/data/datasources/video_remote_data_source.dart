@@ -31,7 +31,6 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
   Future<void> addVideo(Video video) async {
     try {
       await DataSourceUtils.authorizeUser(_auth);
-
       final videoRef = _firestore
           .collection('courses')
           .doc(video.courseId)
@@ -43,7 +42,6 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
         final thumbnailFileRef = _storage.ref().child(
               'courses/${videoModel.courseId}/videos/${videoRef.id}/thumbnail',
             );
-
         await thumbnailFileRef
             .putFile(File(videoModel.thumbnail!))
             .then((value) async {
@@ -52,21 +50,19 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
         });
       }
       await videoRef.set(videoModel.toMap());
+
       await _firestore.collection('courses').doc(video.courseId).update({
         'numberOfVideos': FieldValue.increment(1),
       });
     } on FirebaseException catch (e) {
       throw ServerException(
-        message: e.message ?? 'Unknown error occured',
+        message: e.message ?? 'Unknown error occurred',
         statusCode: e.code,
       );
     } on ServerException {
       rethrow;
     } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-        statusCode: '500',
-      );
+      throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
 
@@ -84,16 +80,13 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
       return videos.docs.map((doc) => VideoModel.fromMap(doc.data())).toList();
     } on FirebaseException catch (e) {
       throw ServerException(
-        message: e.message ?? 'Unknown error occured',
+        message: e.message ?? 'Unknown error occurred',
         statusCode: e.code,
       );
     } on ServerException {
       rethrow;
     } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-        statusCode: '500',
-      );
+      throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
 }

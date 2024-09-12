@@ -9,7 +9,5 @@ class GetVideos extends FutureUsecaseWithParams<List<Video>, String> {
   final VideoRepo _repo;
 
   @override
-  ResultFuture<List<Video>> call(String params) {
-    return _repo.getVideos(params);
-  }
+  ResultFuture<List<Video>> call(String params) => _repo.getVideos(params);
 }

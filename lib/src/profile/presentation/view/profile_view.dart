@@ -31,7 +31,7 @@ class ProfileView extends StatelessWidget {
         onPressed: () {
           sl<NotificationCubit>().sendNotification(
             NotificationModel.empty().copyWith(
-              title: "Test notification",
+              title: 'Test notification',
               body: 'Body',
               category: NotificationCategory.NONE,
             ),

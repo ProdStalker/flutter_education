@@ -9,7 +9,5 @@ class AddVideo extends FutureUsecaseWithParams<void, Video> {
   final VideoRepo _repo;
 
   @override
-  ResultFuture<void> call(Video params) {
-    return _repo.addVideo(params);
-  }
+  ResultFuture<void> call(Video params) => _repo.addVideo(params);
 }

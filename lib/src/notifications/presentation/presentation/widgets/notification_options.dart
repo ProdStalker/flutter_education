@@ -10,7 +10,7 @@ class NotificationOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NotificationNotifier>(
+    return Consumer<NotificationsNotifier>(
       builder: (_, notifier, __) {
         return PopupMenuButton(
           offset: const Offset(0, 50),
@@ -20,22 +20,21 @@ class NotificationOptions extends StatelessWidget {
           ),
           itemBuilder: (context) => [
             PopupMenuItem<void>(
-              onTap: notifier.toggleNotifications,
+              onTap: notifier.toggleMuteNotifications,
               child: PopupItem(
                 title: notifier.muteNotifications
-                    ? 'Unmute Notifications'
+                    ? 'Un-mute Notifications'
                     : 'Mute Notifications',
                 icon: Icon(
                   notifier.muteNotifications
                       ? Icons.notifications_off_outlined
                       : Icons.notifications_outlined,
+                  color: Colours.neutralTextColour,
                 ),
               ),
             ),
             PopupMenuItem<void>(
-              onTap: () {
-                context.read<NotificationCubit>().clearAll();
-              },
+              onTap: context.read<NotificationCubit>().clearAll,
               child: const PopupItem(
                 title: 'Clear All',
                 icon: Icon(

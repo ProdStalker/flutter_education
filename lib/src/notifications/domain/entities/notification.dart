@@ -12,14 +12,12 @@ class Notification extends Equatable {
   });
 
   Notification.empty()
-      : this(
-          id: '_empty.id',
-          title: '_empty.title',
-          body: '_empty.body',
-          category: NotificationCategory.NONE,
-          seen: false,
-          sentAt: DateTime.now(),
-        );
+      : id = '_empty.id',
+        title = '_empty.title',
+        body = '_empty.body',
+        category = NotificationCategory.NONE,
+        seen = false,
+        sentAt = DateTime.now();
 
   final String id;
   final String title;

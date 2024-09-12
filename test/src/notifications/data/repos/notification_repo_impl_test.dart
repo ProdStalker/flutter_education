@@ -3,7 +3,7 @@ import 'package:education/core/errors/exceptions.dart';
 import 'package:education/core/errors/failures.dart';
 import 'package:education/src/notifications/data/datasources/notification_remote_data_source.dart';
 import 'package:education/src/notifications/data/models/notification_model.dart';
-import 'package:education/src/notifications/data/repos/notifications_repos_impl.dart';
+import 'package:education/src/notifications/data/repos/notification_repo_impl.dart';
 import 'package:education/src/notifications/domain/entities/notification.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

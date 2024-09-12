@@ -19,17 +19,15 @@ class VideoCubit extends Cubit<VideoState> {
 
   Future<void> addVideo(Video video) async {
     emit(const AddingVideo());
-
     final result = await _addVideo(video);
     result.fold(
       (failure) => emit(VideoError(failure.errorMessage)),
-      (videos) => emit(const VideoAdded()),
+      (_) => emit(const VideoAdded()),
     );
   }
 
   Future<void> getVideos(String courseId) async {
     emit(const LoadingVideos());
-
     final result = await _getVideos(courseId);
     result.fold(
       (failure) => emit(VideoError(failure.errorMessage)),

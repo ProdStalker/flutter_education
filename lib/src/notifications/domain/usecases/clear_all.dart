@@ -8,7 +8,5 @@ class ClearAll extends FutureUsecaseWithoutParams<void> {
   final NotificationRepo _repo;
 
   @override
-  ResultFuture<void> call() {
-    return _repo.clearAll();
-  }
+  ResultFuture<void> call() => _repo.clearAll();
 }

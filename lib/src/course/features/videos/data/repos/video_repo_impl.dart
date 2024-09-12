@@ -7,14 +7,14 @@ import 'package:education/src/course/features/videos/domain/entities/video.dart'
 import 'package:education/src/course/features/videos/domain/repos/video_repo.dart';
 
 class VideoRepoImpl implements VideoRepo {
-  const VideoRepoImpl(this._remoteDataSource);
+  const VideoRepoImpl(this._remoteDataSrc);
 
-  final VideoRemoteDataSource _remoteDataSource;
+  final VideoRemoteDataSource _remoteDataSrc;
 
   @override
   ResultFuture<void> addVideo(Video video) async {
     try {
-      await _remoteDataSource.addVideo(video);
+      await _remoteDataSrc.addVideo(video);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -24,8 +24,7 @@ class VideoRepoImpl implements VideoRepo {
   @override
   ResultFuture<List<Video>> getVideos(String courseId) async {
     try {
-      final result = await _remoteDataSource.getVideos(courseId);
-
+      final result = await _remoteDataSrc.getVideos(courseId);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));

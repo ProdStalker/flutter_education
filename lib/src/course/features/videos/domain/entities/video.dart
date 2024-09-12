@@ -30,7 +30,5 @@ class Video extends Equatable {
   final bool thumbnailIsFile;
 
   @override
-  List<Object?> get props => [
-        id,
-      ];
+  List<Object?> get props => [id];
 }

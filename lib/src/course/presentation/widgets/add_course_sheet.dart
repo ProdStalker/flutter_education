@@ -6,7 +6,7 @@ import 'package:education/core/utils/constants.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/data/models/course_model.dart';
 import 'package:education/src/course/presentation/cubit/course_cubit.dart';
-import 'package:education/src/notifications/presentation/widgets/notification_wrapper.dart';
+import 'package:education/src/notifications/presentation/presentation/widgets/notification_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => CourseOfTheDayNotifier()),
         ChangeNotifierProvider(
-          create: (_) => NotificationNotifier(sl<SharedPreferences>()),
+          create: (_) => NotificationsNotifier(sl<SharedPreferences>()),
         ),
       ],
       child: MaterialApp(

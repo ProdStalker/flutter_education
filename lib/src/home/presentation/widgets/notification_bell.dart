@@ -5,7 +5,7 @@ import 'package:education/core/extensions/context_extension.dart';
 import 'package:education/core/services/injection_container.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/notifications/presentation/cubit/notification_cubit.dart';
-import 'package:education/src/notifications/presentation/views/notifications_view.dart';
+import 'package:education/src/notifications/presentation/presentation/views/notifications_view.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -28,7 +28,7 @@ class _NotificationBellState extends State<NotificationBell> {
     context.read<NotificationCubit>().getNotifications();
     newNotificationListenable.addListener(() {
       if (newNotificationListenable.value) {
-        if (context.read<NotificationNotifier>().muteNotifications) {
+        if (context.read<NotificationsNotifier>().muteNotifications) {
           player.play(AssetSource('sounds/notification.mp3'));
         }
         newNotificationListenable.value = false;

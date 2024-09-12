@@ -14,18 +14,6 @@ class VideoModel extends Video {
     super.tutor,
   });
 
-  VideoModel.fromMap(DataMap map)
-      : super(
-          id: map['id'] as String,
-          thumbnail: map['thumbnail'] as String?,
-          videoURL: map['videoURL'] as String,
-          title: map['title'] as String?,
-          tutor: map['tutor'] as String?,
-          courseId: map['courseId'] as String,
-          uploadDate: (map['uploadDate'] as Timestamp).toDate(),
-          //thumbnailIsFile: map['thumbnailIsFile'] as bool,
-        );
-
   VideoModel.empty()
       : this(
           id: '_empty.id',
@@ -34,17 +22,16 @@ class VideoModel extends Video {
           courseId: '_empty.courseId',
         );
 
-  DataMap toMap() {
-    return {
-      'id': id,
-      'thumbnail': thumbnail,
-      'videoURL': videoURL,
-      'title': title,
-      'tutor': tutor,
-      'courseId': courseId,
-      'uploadDate': FieldValue.serverTimestamp(),
-    };
-  }
+  VideoModel.fromMap(DataMap map)
+      : super(
+          id: map['id'] as String,
+          videoURL: map['videoURL'] as String,
+          courseId: map['courseId'] as String,
+          uploadDate: (map['uploadDate'] as Timestamp).toDate(),
+          thumbnail: map['thumbnail'] as String?,
+          title: map['title'] as String?,
+          tutor: map['tutor'] as String?,
+        );
 
   VideoModel copyWith({
     String? id,
@@ -66,5 +53,17 @@ class VideoModel extends Video {
       uploadDate: uploadDate ?? this.uploadDate,
       thumbnailIsFile: thumbnailIsFile ?? this.thumbnailIsFile,
     );
+  }
+
+  DataMap toMap() {
+    return {
+      'id': id,
+      'thumbnail': thumbnail,
+      'videoURL': videoURL,
+      'title': title,
+      'tutor': tutor,
+      'courseId': courseId,
+      'uploadDate': FieldValue.serverTimestamp(),
+    };
   }
 }

@@ -8,7 +8,5 @@ class Clear extends FutureUsecaseWithParams<void, String> {
   final NotificationRepo _repo;
 
   @override
-  ResultFuture<void> call(String params) {
-    return _repo.clear(params);
-  }
+  ResultFuture<void> call(String params) => _repo.clear(params);
 }

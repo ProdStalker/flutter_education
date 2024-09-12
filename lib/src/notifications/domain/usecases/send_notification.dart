@@ -9,7 +9,6 @@ class SendNotification extends FutureUsecaseWithParams<void, Notification> {
   final NotificationRepo _repo;
 
   @override
-  ResultFuture<void> call(Notification params) {
-    return _repo.sendNotification(params);
-  }
+  ResultFuture<void> call(Notification params) =>
+      _repo.sendNotification(params);
 }

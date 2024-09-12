@@ -6,10 +6,10 @@ import 'package:education/core/enums/notification_enum.dart';
 import 'package:education/core/extensions/string_extensions.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/domain/entities/course.dart';
-import 'package:education/src/course/features/materials/presentation/utils/video_utils.dart';
 import 'package:education/src/course/features/videos/data/models/video_model.dart';
 import 'package:education/src/course/features/videos/presentation/cubit/video_cubit.dart';
-import 'package:education/src/notifications/presentation/widgets/notification_wrapper.dart';
+import 'package:education/src/course/features/videos/presentation/utils/video_utils.dart';
+import 'package:education/src/notifications/presentation/presentation/widgets/notification_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
@@ -26,7 +26,7 @@ class AddVideoView extends StatefulWidget {
 
 class _AddVideoViewState extends State<AddVideoView> {
   final urlController = TextEditingController();
-  final authorController = TextEditingController();
+  final authorController = TextEditingController(text: 'dbestech');
   final titleController = TextEditingController();
   final courseController = TextEditingController();
   final courseNotifier = ValueNotifier<Course?>(null);
@@ -34,7 +34,6 @@ class _AddVideoViewState extends State<AddVideoView> {
   final formKey = GlobalKey<FormState>();
 
   VideoModel? video;
-
   PreviewData? previewData;
 
   final authorFocusNode = FocusNode();
@@ -45,14 +44,14 @@ class _AddVideoViewState extends State<AddVideoView> {
 
   bool get isYoutube => urlController.text.trim().isYoutubeVideo;
 
-  bool thumbnailIsFile = false;
+  bool thumbNailIsFile = false;
   bool loading = false;
   bool showingDialog = false;
 
   void reset() {
     setState(() {
       urlController.clear();
-      authorController.clear();
+      authorController.text = 'dbestech';
       titleController.clear();
       getMoreDetails = false;
       loading = false;
@@ -65,43 +64,29 @@ class _AddVideoViewState extends State<AddVideoView> {
   void initState() {
     super.initState();
     urlController.addListener(() {
-      if (urlController.text.trim().isEmpty) {
-        reset();
-      }
+      if (urlController.text.trim().isEmpty) reset();
     });
-  }
-
-  @override
-  void dispose() {
-    urlController.dispose();
-    authorController.dispose();
-    titleController.dispose();
-    courseController.dispose();
-    courseNotifier.dispose();
-    urlFocusNode.dispose();
-    titleFocusNode.dispose();
-    authorFocusNode.dispose();
-
-    super.dispose();
+    authorController.addListener(() {
+      video = video?.copyWith(tutor: authorController.text.trim());
+    });
+    titleController.addListener(() {
+      video = video?.copyWith(title: titleController.text.trim());
+    });
   }
 
   Future<void> fetchVideo() async {
-    if (urlController.text.trim().isEmpty) {
-      return;
-    }
+    if (urlController.text.trim().isEmpty) return;
     FocusManager.instance.primaryFocus?.unfocus();
-
     setState(() {
       getMoreDetails = false;
       loading = false;
-      thumbnailIsFile = false;
+      thumbNailIsFile = false;
       video = null;
+      previewData = null;
     });
-
     setState(() {
       loading = true;
     });
-
     if (isYoutube) {
       video = await VideoUtils.getVideoFromYT(
         context,
@@ -114,6 +99,19 @@ class _AddVideoViewState extends State<AddVideoView> {
   }
 
   @override
+  void dispose() {
+    urlController.dispose();
+    authorController.dispose();
+    titleController.dispose();
+    courseController.dispose();
+    courseNotifier.dispose();
+    urlFocusNode.dispose();
+    titleFocusNode.dispose();
+    authorFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return NotificationWrapper(
       onNotificationSent: () {
@@ -122,18 +120,19 @@ class _AddVideoViewState extends State<AddVideoView> {
       child: BlocListener<VideoCubit, VideoState>(
         listener: (context, state) {
           if (showingDialog == true) {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            showingDialog = false;
           }
           if (state is AddingVideo) {
-            showingDialog = true;
             CoreUtils.showLoadingDialog(context);
+            showingDialog = true;
           } else if (state is VideoError) {
             CoreUtils.showSnackBar(context, state.message);
           } else if (state is VideoAdded) {
             CoreUtils.showSnackBar(context, 'Video added successfully');
             CoreUtils.sendNotification(
               context: context,
-              title: 'New (${courseNotifier.value!.title} video',
+              title: 'New ${courseNotifier.value!.title} video',
               body: 'A new video has been added for '
                   '${courseNotifier.value!.title}',
               category: NotificationCategory.VIDEO,
@@ -142,9 +141,7 @@ class _AddVideoViewState extends State<AddVideoView> {
         },
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text('Add Video'),
-          ),
+          appBar: AppBar(title: const Text('Add Video')),
           body: ListView(
             padding: const EdgeInsets.all(20),
             shrinkWrap: true,
@@ -156,9 +153,7 @@ class _AddVideoViewState extends State<AddVideoView> {
                   notifier: courseNotifier,
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               InfoField(
                 controller: urlController,
                 hintText: 'Enter video URL',
@@ -174,9 +169,7 @@ class _AddVideoViewState extends State<AddVideoView> {
                   return Column(
                     children: [
                       if (urlController.text.trim().isNotEmpty) ...[
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: fetchVideo,
                           child: const Text('Fetch Video'),
@@ -190,17 +183,16 @@ class _AddVideoViewState extends State<AddVideoView> {
                 LinkPreview(
                   onPreviewDataFetched: (data) async {
                     setState(() {
-                      thumbnailIsFile = false;
+                      thumbNailIsFile = false;
                       video = VideoModel.empty().copyWith(
                         thumbnail: data.image?.url,
                         videoURL: urlController.text.trim(),
                         title: data.title ?? 'No title',
                       );
-                      if (data.image?.url != null) {
-                        loading = false;
-                      }
+                      if (data.image?.url != null) loading = false;
                       getMoreDetails = true;
                       titleController.text = data.title ?? '';
+                      loading = false;
                     });
                   },
                   previewData: previewData,
@@ -212,7 +204,7 @@ class _AddVideoViewState extends State<AddVideoView> {
                   padding: const EdgeInsets.only(top: 20),
                   child: VideoTile(
                     video!,
-                    isFile: thumbnailIsFile,
+                    isFile: thumbNailIsFile,
                     uploadTimePrefix: '~',
                   ),
                 ),
@@ -222,7 +214,7 @@ class _AddVideoViewState extends State<AddVideoView> {
                   keyboardType: TextInputType.name,
                   autoFocus: true,
                   focusNode: authorFocusNode,
-                  labelText: 'Tutor name',
+                  labelText: 'Tutor Name',
                   onEditingComplete: () {
                     setState(() {});
                     titleFocusNode.requestFocus();
@@ -230,18 +222,15 @@ class _AddVideoViewState extends State<AddVideoView> {
                 ),
                 InfoField(
                   controller: titleController,
-                  autoFocus: true,
+                  labelText: 'Video Title',
                   focusNode: titleFocusNode,
-                  labelText: 'Video title',
                   onEditingComplete: () {
                     FocusManager.instance.primaryFocus?.unfocus();
                     setState(() {});
                   },
                 ),
               ],
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Center(
                 child: ReactiveButton(
                   isDisabled: video == null,
@@ -250,10 +239,9 @@ class _AddVideoViewState extends State<AddVideoView> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       if (courseNotifier.value == null) {
-                        CoreUtils.showSnackBar(context, 'Please pick a course');
+                        CoreUtils.showSnackBar(context, 'Please Pick a course');
                         return;
                       }
-
                       if (courseNotifier.value != null &&
                           video != null &&
                           video!.tutor == null &&
@@ -262,16 +250,22 @@ class _AddVideoViewState extends State<AddVideoView> {
                           tutor: authorController.text.trim(),
                         );
                       }
-                    }
-                    if (video != null &&
-                        video!.thumbnail != null &&
-                        video!.tutor != null) {
-                      video = video?.copyWith(
-                        thumbnailIsFile: thumbnailIsFile,
-                        courseId: courseNotifier.value!.id,
-                        uploadDate: DateTime.now(),
-                      );
-                      context.read<VideoCubit>().addVideo(video!);
+                      if (video != null &&
+                          video!.tutor != null &&
+                          video!.title != null &&
+                          video!.title!.isNotEmpty) {
+                        video = video?.copyWith(
+                          thumbnailIsFile: thumbNailIsFile,
+                          courseId: courseNotifier.value!.id,
+                          uploadDate: DateTime.now(),
+                        );
+                        context.read<VideoCubit>().addVideo(video!);
+                      } else {
+                        CoreUtils.showSnackBar(
+                          context,
+                          'Please Fill all fields',
+                        );
+                      }
                     }
                   },
                 ),

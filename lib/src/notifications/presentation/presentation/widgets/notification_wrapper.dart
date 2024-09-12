@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationWrapper extends StatefulWidget {
   const NotificationWrapper({
-    required this.child,
     required this.onNotificationSent,
-    this.extraActivity,
+    required this.child,
     super.key,
+    this.extraActivity,
   });
 
   final Widget child;
@@ -30,8 +30,7 @@ class _NotificationWrapperState extends State<NotificationWrapper> {
           Navigator.pop(context);
           showingLoader = false;
         }
-        showingLoader = false;
-        if (state is NotificationSent) {
+        if (state is NotificationCleared) {
           widget.extraActivity?.call();
           widget.onNotificationSent();
         } else if (state is SendingNotification) {

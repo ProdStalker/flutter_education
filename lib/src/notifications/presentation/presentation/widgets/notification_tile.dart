@@ -1,4 +1,5 @@
 import 'package:education/core/commons/widgets/time_text.dart';
+import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/notifications/domain/entities/notification.dart';
 import 'package:education/src/notifications/presentation/cubit/notification_cubit.dart';
 import 'package:flutter/material.dart' hide Notification;
@@ -15,7 +16,13 @@ class NotificationTile extends StatelessWidget {
       context.read<NotificationCubit>().markAsRead(notification.id);
     }
     return BlocListener<NotificationCubit, NotificationState>(
-      listener: (_, state) {},
+      listener: (context, state) {
+        if (state is ClearingNotifications) {
+          CoreUtils.showLoadingDialog(context);
+        } else if (state is NotificationCleared) {
+          Navigator.pop(context);
+        }
+      },
       child: Dismissible(
         key: Key(notification.id),
         direction: DismissDirection.endToStart,
@@ -36,10 +43,7 @@ class NotificationTile extends StatelessWidget {
           ),
           title: Text(
             notification.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
           ),
           subtitle: TimeText(notification.sentAt),
         ),

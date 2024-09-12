@@ -11,14 +11,14 @@ import 'package:education/src/notifications/domain/repos/notification_repo.dart'
 import 'package:flutter/foundation.dart';
 
 class NotificationRepoImpl implements NotificationRepo {
-  const NotificationRepoImpl(this._remoteDataSource);
+  const NotificationRepoImpl(this._remoteDataSrc);
 
-  final NotificationRemoteDataSource _remoteDataSource;
+  final NotificationRemoteDataSource _remoteDataSrc;
 
   @override
   ResultFuture<void> clear(String notificationId) async {
     try {
-      await _remoteDataSource.clear(notificationId);
+      await _remoteDataSrc.clear(notificationId);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -28,7 +28,7 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   ResultFuture<void> clearAll() async {
     try {
-      await _remoteDataSource.clearAll();
+      await _remoteDataSrc.clearAll();
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -37,7 +37,7 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   ResultStream<List<Notification>> getNotifications() {
-    return _remoteDataSource.getNotifications().transform(
+    return _remoteDataSrc.getNotifications().transform(
           StreamTransformer<List<NotificationModel>,
               Either<Failure, List<Notification>>>.fromHandlers(
             handleData: (notifications, sink) {
@@ -50,10 +50,7 @@ class NotificationRepoImpl implements NotificationRepo {
               } else {
                 sink.add(
                   Left(
-                    ServerFailure(
-                      message: error.toString(),
-                      statusCode: 505,
-                    ),
+                    ServerFailure(message: error.toString(), statusCode: 505),
                   ),
                 );
               }
@@ -65,7 +62,7 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   ResultFuture<void> markAsRead(String notificationId) async {
     try {
-      await _remoteDataSource.markAsRead(notificationId);
+      await _remoteDataSrc.markAsRead(notificationId);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -75,7 +72,7 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   ResultFuture<void> sendNotification(Notification notification) async {
     try {
-      await _remoteDataSource.sendNotification(notification);
+      await _remoteDataSrc.sendNotification(notification);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
