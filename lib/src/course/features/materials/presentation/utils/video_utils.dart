@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:education/core/extensions/string_extensions.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/features/videos/data/models/video_model.dart';
 import 'package:education/src/course/features/videos/domain/entities/video.dart';
+import 'package:education/src/course/features/videos/presentation/views/video_player_view.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_metadata/youtube_metadata.dart';
@@ -60,6 +63,7 @@ class VideoUtils {
   }
 
   static Future<void> playVideo(BuildContext context, String videoUrl) async {
+    final navigator = Navigator.of(context);
     if (videoUrl.isYoutubeVideo) {
       if (!await launchUrl(
         Uri.parse(videoUrl),
@@ -69,7 +73,12 @@ class VideoUtils {
         CoreUtils.showSnackBar(context, 'Could not launch $videoUrl');
       }
     } else {
-      // context.push(VideoPlayerView())
+      unawaited(
+        navigator.pushNamed(
+          VideoPlayerView.routeName,
+          arguments: videoUrl,
+        ),
+      );
     }
   }
 }

@@ -12,6 +12,8 @@ import 'package:education/src/course/features/materials/presentation/cubit/mater
 import 'package:education/src/course/features/materials/presentation/views/add_materials_view.dart';
 import 'package:education/src/course/features/videos/presentation/cubit/video_cubit.dart';
 import 'package:education/src/course/features/videos/presentation/views/add_video_view.dart';
+import 'package:education/src/course/features/videos/presentation/views/course_videos_view.dart';
+import 'package:education/src/course/features/videos/presentation/views/video_player_view.dart';
 import 'package:education/src/course/presentation/cubit/course_cubit.dart';
 import 'package:education/src/course/presentation/views/course_details_screen.dart';
 import 'package:education/src/dashboard/presentation/views/dashboard.dart';
