@@ -12,9 +12,8 @@ import 'package:flutter/foundation.dart';
 class ExamController extends ChangeNotifier {
   ExamController({
     required Exam exam,
-    required List<ExamQuestion> questions,
   })  : _exam = exam,
-        _questions = questions,
+        _questions = exam.questions!,
         _userExam = UserExamModel(
           examId: exam.id,
           courseId: exam.courseId,
