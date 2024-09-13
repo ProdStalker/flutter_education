@@ -14,9 +14,9 @@ class Group extends Equatable {
 
   const Group.empty()
       : this(
-          id: '_empty.id',
-          name: '_empty.name',
-          courseId: '_empty.courseId',
+          id: '',
+          name: '',
+          courseId: '',
           members: const [],
           lastMessage: null,
           groupImageUrl: null,
@@ -34,9 +34,5 @@ class Group extends Equatable {
   final String? lastMessageSenderName;
 
   @override
-  List<Object?> get props => [
-        id,
-        name,
-        courseId,
-      ];
+  List<Object?> get props => [id, name, courseId];
 }

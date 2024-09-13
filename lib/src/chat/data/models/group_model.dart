@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:education/core/utils/typedefs.dart';
 import 'package:education/src/chat/domain/entities/group.dart';
 
@@ -5,37 +6,42 @@ class GroupModel extends Group {
   const GroupModel({
     required super.id,
     required super.name,
-    required super.courseId,
     required super.members,
+    required super.courseId,
     super.lastMessage,
-    super.groupImageUrl,
-    super.lastMessageTimestamp,
     super.lastMessageSenderName,
+    super.lastMessageTimestamp,
+    super.groupImageUrl,
   });
 
-  factory GroupModel.fromMap(DataMap map) {
-    return GroupModel(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      courseId: map['courseId'] as String,
-      members: List<String>.from(map['members'] as List<dynamic>),
-      lastMessage: map['lastMessage'] as String,
-      groupImageUrl: map['groupImageUrl'] as String,
-      lastMessageTimestamp: map['lastMessageTimestamp'] as DateTime,
-      lastMessageSenderName: map['lastMessageSenderName'] as String,
-    );
-  }
-
-  const GroupModel.empty()
+  GroupModel.empty()
       : this(
-          id: '_empty.id',
-          name: '_empty.name',
-          courseId: '_empty.courseId',
+          id: '',
+          name: '',
           members: const [],
-          lastMessage: null,
-          groupImageUrl: null,
-          lastMessageTimestamp: null,
-          lastMessageSenderName: null,
+          lastMessage: '',
+          courseId: '',
+          groupImageUrl: '',
+          lastMessageSenderName: '',
+          lastMessageTimestamp: DateTime.now(),
+        );
+
+  GroupModel.fromMap(Map<String, dynamic> map)
+      : this(
+          id: map['id'] as String,
+          name: map['name'] as String,
+          courseId: map['courseId'] as String,
+          members: List<String>.from(map['members'] as List<dynamic>),
+          // OR
+          // members: (map['members'] as List<dynamic>).cast<String>(),
+          // OR
+          // members: (map['members'] as List<dynamic>).map((e) => e as String)
+          // .toList(),
+          lastMessage: map['lastMessage'] as String?,
+          lastMessageSenderName: map['lastMessageSenderName'] as String?,
+          lastMessageTimestamp:
+              (map['lastMessageTimestamp'] as Timestamp?)?.toDate(),
+          groupImageUrl: map['groupImageUrl'] as String?,
         );
 
   GroupModel copyWith({
@@ -43,10 +49,10 @@ class GroupModel extends Group {
     String? name,
     String? courseId,
     List<String>? members,
-    String? lastMessage,
-    String? groupImageUrl,
     DateTime? lastMessageTimestamp,
     String? lastMessageSenderName,
+    String? lastMessage,
+    String? groupImageUrl,
   }) {
     return GroupModel(
       id: id ?? this.id,
@@ -54,23 +60,24 @@ class GroupModel extends Group {
       courseId: courseId ?? this.courseId,
       members: members ?? this.members,
       lastMessage: lastMessage ?? this.lastMessage,
-      groupImageUrl: groupImageUrl ?? this.groupImageUrl,
-      lastMessageTimestamp: lastMessageTimestamp ?? this.lastMessageTimestamp,
       lastMessageSenderName:
           lastMessageSenderName ?? this.lastMessageSenderName,
+      lastMessageTimestamp: lastMessageTimestamp ?? this.lastMessageTimestamp,
+      groupImageUrl: groupImageUrl ?? this.groupImageUrl,
     );
   }
 
   DataMap toMap() {
     return {
       'id': id,
-      'name': name,
       'courseId': courseId,
+      'name': name,
       'members': members,
       'lastMessage': lastMessage,
-      'groupImageUrl': groupImageUrl,
-      'lastMessageTimestamp': lastMessageTimestamp,
       'lastMessageSenderName': lastMessageSenderName,
+      'lastMessageTimestamp':
+          lastMessage == null ? null : FieldValue.serverTimestamp(),
+      'groupImageUrl': groupImageUrl,
     };
   }
 }
