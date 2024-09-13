@@ -3,11 +3,15 @@ import 'package:education/core/commons/widgets/gradient_background.dart';
 import 'package:education/core/commons/widgets/nested_back_button.dart';
 import 'package:education/core/commons/widgets/not_found_text.dart';
 import 'package:education/core/res/media_res.dart';
+import 'package:education/core/services/injection_container.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/domain/entities/course.dart';
 import 'package:education/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
+import 'package:education/src/course/features/materials/presentation/app/providers/resource_controller.dart';
+import 'package:education/src/course/features/materials/presentation/widgets/resource_tile.dart';
 import 'package:flutter/material.dart' hide MaterialState;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class CourseMaterialsView extends StatefulWidget {
   const CourseMaterialsView(
@@ -73,7 +77,11 @@ class _CourseMaterialsViewState extends State<CourseMaterialsView> {
                     color: Color(0xFFE6E8EC),
                   ),
                   itemBuilder: (_, index) {
-                    return const Placeholder(fallbackHeight: 50);
+                    return ChangeNotifierProvider(
+                      create: (_) =>
+                          sl<ResourceController>()..init(materials[index]),
+                      child: const ResourceTile(),
+                    );
                   },
                 ),
               );

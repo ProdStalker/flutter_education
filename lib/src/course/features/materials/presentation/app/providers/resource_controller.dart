@@ -44,7 +44,7 @@ class ResourceController extends ChangeNotifier {
     return File(cachedFilePath!);
   }
 
-  bool get _fileExists {
+  bool get fileExists {
     final cachedFilePath = _prefs.getString(_pathKey);
     if (cachedFilePath == null) {
       return false;
@@ -105,7 +105,7 @@ class ResourceController extends ChangeNotifier {
   }
 
   Future<void> deleteFile() async {
-    if (_fileExists) {
+    if (fileExists) {
       final file = await _getFileFromCache();
       await file.delete();
       await _prefs.remove(_pathKey);
@@ -113,7 +113,7 @@ class ResourceController extends ChangeNotifier {
   }
 
   Future<void> openFile() async {
-    if (_fileExists) {
+    if (fileExists) {
       final file = await _getFileFromCache();
       await OpenFile.open(file.path);
     }

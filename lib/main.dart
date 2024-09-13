@@ -19,6 +19,7 @@ Future<void> main() async {
   );
 
   await init();
+  //await sl<SharedPreferences>().clear();
   runApp(const MyApp());
 }
 

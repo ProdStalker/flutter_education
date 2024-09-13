@@ -79,6 +79,12 @@ Future<void> _initMaterial() async {
         auth: sl(),
         storage: sl(),
       ),
+    )
+    ..registerFactory(
+      () => ResourceController(
+        storage: sl(),
+        prefs: sl(),
+      ),
     );
 }
 
