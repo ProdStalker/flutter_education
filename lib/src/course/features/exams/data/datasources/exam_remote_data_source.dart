@@ -303,7 +303,7 @@ class ExamRemoteDataSourceImpl implements ExamRemoteDataSource {
     } catch (e) {
       throw ServerException(
         message: e.toString(),
-        statusCode: '500',
+        statusCode: '505',
       );
     }
   }
