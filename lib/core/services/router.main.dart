@@ -70,6 +70,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         },
         settings: settings,
       );
+    case ExamHistoryDetailsScreen.routeName:
+      return _pageBuilder(
+        (_) {
+          return ExamHistoryDetailsScreen(settings.arguments! as UserExam);
+        },
+        settings: settings,
+      );
     case AddVideoView.routeName:
       return _pageBuilder(
         (_) => MultiBlocProvider(
