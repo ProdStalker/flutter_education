@@ -115,6 +115,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
+    case CourseMaterialsView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (_) => sl<MaterialCubit>(),
+          child: CourseMaterialsView(settings.arguments! as Course),
+        ),
+        settings: settings,
+      );
     case VideoPlayerView.routeName:
       return _pageBuilder(
         (_) => VideoPlayerView(videoUrl: settings.arguments! as String),
