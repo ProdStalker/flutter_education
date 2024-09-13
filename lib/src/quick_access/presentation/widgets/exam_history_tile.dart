@@ -28,7 +28,7 @@ class ExamHistoryTile extends StatelessWidget {
       onTap: navigateToDetails
           ? () => Navigator.of(context).pushNamed(
               ExamHistoryDetailsScreen.routeName,
-              arguments: userExam)
+              arguments: userExam,)
           : null,
       child: Row(
         children: [

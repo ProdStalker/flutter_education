@@ -16,7 +16,7 @@ class ExamHistoryDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("${userExam.examTitle} Details"),
+        title: Text('${userExam.examTitle} Details'),
       ),
       body: SafeArea(
         child: Padding(
