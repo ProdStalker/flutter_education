@@ -28,7 +28,7 @@ import 'package:education/src/course/features/materials/data/repos/material_repo
 import 'package:education/src/course/features/materials/domain/repos/material_repo.dart';
 import 'package:education/src/course/features/materials/domain/usecases/add_material.dart';
 import 'package:education/src/course/features/materials/domain/usecases/get_materials.dart';
-import 'package:education/src/course/features/materials/presentation/cubit/material_cubit.dart';
+import 'package:education/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
 import 'package:education/src/course/features/videos/data/datasources/video_remote_data_source.dart';
 import 'package:education/src/course/features/videos/data/repos/video_repo_impl.dart';
 import 'package:education/src/course/features/videos/domain/repos/video_repo.dart';

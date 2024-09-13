@@ -5,7 +5,7 @@ import 'package:education/core/commons/widgets/not_found_text.dart';
 import 'package:education/core/res/media_res.dart';
 import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/domain/entities/course.dart';
-import 'package:education/src/course/features/materials/presentation/cubit/material_cubit.dart';
+import 'package:education/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
 import 'package:flutter/material.dart' hide MaterialState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
