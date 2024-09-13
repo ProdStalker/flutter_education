@@ -1,11 +1,21 @@
 import 'package:education/core/commons/widgets/course_picker.dart';
 import 'package:education/core/commons/widgets/info_field.dart';
+import 'package:education/core/enums/notification_enum.dart';
 import 'package:education/core/extensions/context_extension.dart';
+import 'package:education/core/extensions/int_extensions.dart';
 import 'package:education/core/res/colours.dart';
+import 'package:education/core/utils/core_utils.dart';
 import 'package:education/src/course/domain/entities/course.dart';
+import 'package:education/src/course/features/materials/data/models/resource_model.dart';
 import 'package:education/src/course/features/materials/domain/entities/picked_resource.dart';
+import 'package:education/src/course/features/materials/domain/entities/resource.dart';
+import 'package:education/src/course/features/materials/presentation/cubit/material_cubit.dart';
+import 'package:education/src/course/features/materials/presentation/widgets/edit_resource_dialog.dart';
+import 'package:education/src/course/features/materials/presentation/widgets/picked_resource_tile.dart';
+import 'package:education/src/notifications/presentation/presentation/widgets/notification_wrapper.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MaterialState;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddMaterialsView extends StatefulWidget {
   const AddMaterialsView({super.key});
@@ -24,6 +34,7 @@ class _AddMaterialsViewState extends State<AddMaterialsView> {
   final authorController = TextEditingController();
 
   bool authorSet = false;
+  bool showingLoader = false;
 
   Future<void> pickResources() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
@@ -61,6 +72,40 @@ class _AddMaterialsViewState extends State<AddMaterialsView> {
       return;
     }
 
+    setState(() {
+      authorSet = true;
+    });
+  }
+
+  void uploadMaterials() {
+    if (formKey.currentState!.validate()) {
+      if (this.resources.isEmpty) {
+        return CoreUtils.showSnackBar(context, 'No resources picked yet');
+      }
+      if (!authorSet && authorController.text.trim().isNotEmpty) {
+        return CoreUtils.showSnackBar(
+          context,
+          'Please tap on th echeck icon in '
+          'the author field to confirm the author',
+        );
+      }
+
+      final resources = <Resource>[];
+      for (final resource in this.resources) {
+        resources.add(
+          ResourceModel.empty().copyWith(
+            courseId: courseNotifier.value!.id,
+            fileURL: resource.path,
+            title: resource.title,
+            description: resource.description,
+            author: resource.author,
+            fileExtension: resource.path.split('.').last,
+          ),
+        );
+      }
+      context.read<MaterialCubit>().addMaterials(resources);
+    }
+
     final text = authorController.text.trim();
     FocusManager.instance.primaryFocus?.unfocus();
 
@@ -88,72 +133,138 @@ class _AddMaterialsViewState extends State<AddMaterialsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Add Materials',
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: Column(
-              children: [
-                Form(
-                  key: formKey,
-                  child: CoursePicker(
-                    controller: courseController,
-                    notifier: courseNotifier,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                InfoField(
-                  controller: authorController,
-                  border: true,
-                  hintText: 'General Author',
-                  onChanged: (_) {
-                    if (authorSet) {
-                      setState(() {
-                        authorSet = false;
-                      });
-                    }
-                  },
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      authorSet
-                          ? Icons.check_circle
-                          : Icons.check_circle_outline,
-                      color: authorSet ? Colors.green : Colors.grey,
-                    ),
-                    onPressed: setAuthor,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'You can upload multiple materials at once.',
-                  style: context.theme.textTheme.bodySmall?.copyWith(
-                    color: Colours.neutralTextColour,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return NotificationWrapper(
+      onNotificationSent: () {
+        Navigator.pop(context);
+      },
+      child: BlocListener<MaterialCubit, MaterialState>(
+        listener: (context, state) {
+          if (showingLoader) {
+            Navigator.pop(context);
+            showingLoader = false;
+          }
+          if (state is MaterialError) {
+            CoreUtils.showSnackBar(context, state.message);
+          } else if (state is MaterialsAdded) {
+            CoreUtils.showSnackBar(
+              context,
+              'Material${resources.length.pluralize} uploaded successfully',
+            );
+            CoreUtils.sendNotification(
+              context: context,
+              title: 'New ${courseNotifier.value!.title} material'
+                  '${resources.length.pluralize}',
+              body: 'A new material has been uploaded for '
+                  '${courseNotifier.value!.title}',
+              category: NotificationCategory.MATERIAL,
+            );
+          } else if (state is AddingMaterials) {
+            CoreUtils.showLoadingDialog(context);
+            showingLoader = true;
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text(
+              'Add Materials',
+            ),
+          ),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: pickMaterial,
-                      child: const Text('Add Material'),
+                    Form(
+                      key: formKey,
+                      child: CoursePicker(
+                        controller: courseController,
+                        notifier: courseNotifier,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    InfoField(
+                      controller: authorController,
+                      border: true,
+                      hintText: 'General Author',
+                      onChanged: (_) {
+                        if (authorSet) {
+                          setState(() {
+                            authorSet = false;
+                          });
+                        }
+                      },
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          authorSet
+                              ? Icons.check_circle
+                              : Icons.check_circle_outline,
+                          color: authorSet ? Colors.green : Colors.grey,
+                        ),
+                        onPressed: setAuthor,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'You can upload multiple materials at once.',
+                      style: context.theme.textTheme.bodySmall?.copyWith(
+                        color: Colours.neutralTextColour,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    if (resources.isNotEmpty) ...[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: resources.length,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (_, index) {
+                            final resource = resources[index];
+                            return PickedResourceTile(
+                              resource,
+                              onEdit: () => editResource(index),
+                              onDelete: () {
+                                setState(() {
+                                  resources.removeAt(index);
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: pickResources,
+                          child: const Text('Add Material'),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: uploadMaterials,
+                          child: const Text('Confirm'),
+                        ),
+                      ],
                     ),
                   ],
-                )
-              ],
+                ),
+              ),
             ),
           ),
         ),
