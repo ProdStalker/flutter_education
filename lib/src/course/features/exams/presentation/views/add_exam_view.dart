@@ -104,7 +104,7 @@ class _AddExamViewState extends State<AddExamView> {
           ),
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Center(
                 child: Column(
                   children: [

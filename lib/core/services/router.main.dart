@@ -123,6 +123,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
+    case CourseExamsView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (_) => sl<ExamCubit>(),
+          child: CourseExamsView(settings.arguments! as Course),
+        ),
+        settings: settings,
+      );
+    case ExamDetailsView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (_) => sl<ExamCubit>(),
+          child: ExamDetailsView(settings.arguments! as Exam),
+        ),
+        settings: settings,
+      );
     case VideoPlayerView.routeName:
       return _pageBuilder(
         (_) => VideoPlayerView(videoUrl: settings.arguments! as String),
